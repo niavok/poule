@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_delete_activity) {
 
         } else if (id == R.id.nav_settings) {
-            //Intent intent = new Intent(this, SettingsActivity.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
