@@ -12,13 +12,7 @@
     tools:context="com.niavok.poule.SettingsActivity">
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+
 
     <ScrollView
         android:id="@+id/login_form"
@@ -100,24 +94,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Test login"
+                    android:text="Save login"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/login_success"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_weight="0"
+                    android:layout_gravity="center"
                     android:visibility="gone"
                     app:srcCompat="@android:drawable/presence_online" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/login_fail"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_weight="0"
+                    android:layout_gravity="center"
                     android:visibility="gone"
                     app:srcCompat="@android:drawable/presence_busy" />
+                <ProgressBar
+                    android:id="@+id/login_progress"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
