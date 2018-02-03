@@ -1,0 +1,41 @@
+Features
+
+
+login /security
+
+add resa planner
+
+list resa planner
+enable/disable resa planner
+
+notification on planing done/error
+
+notification to ask to reserve ?
+
+
+Main activity :
+- resa list, sort by incomming date
+- enable button
+- reservation status
+
+Menu :
+- login button 
+- add button
+- remove
+
+
+Login activity
+- login
+- password
+- clé securité
+- Test button
+
+Add activity button
+- liste de salle
+- liste des jours
+- heure
+- check button
+- add button
+
+Remove activity
+-liste of activity with remove button
