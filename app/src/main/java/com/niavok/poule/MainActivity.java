@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_add_activity) {
-
+            Intent intent = new Intent(this, AddActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_delete_activity) {
 
         } else if (id == R.id.nav_settings) {

@@ -1,24 +1,16 @@
 package com.niavok.poule;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 //import static android.Manifest.permission.READ_CONTACTS;
 
@@ -52,10 +44,14 @@ public class SettingsActivity extends AppCompatActivity {
     private View mLoginSuccessView;
     private View mLoginFailView;
 
+    private PouleConfig mConfig;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mConfig = new PouleConfig(getApplicationContext());
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
 
@@ -69,46 +65,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        mEmailView.setText(mConfig.getEmail());
+        mPasswordView.setText(mConfig.getPassword());
+        mSecurityView.setText(mConfig.getSecurity());
+
         mLoginSuccessView = findViewById(R.id.login_success);
         mLoginFailView = findViewById(R.id.login_fail);
         mProgressView = findViewById(R.id.login_progress);
     }
-
-    /*private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }*/
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }*/
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -214,10 +178,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            GSLogin loginQuery = new GSLogin(mEmail, mPassword);
+            GSSession session = new GSSession(mEmail, mPassword);
 
-            loginQuery.Query();
-            return loginQuery.IsLogged();
+            session.login();
+            return session.isLogged();
         }
 
         @Override
@@ -227,6 +191,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             if (success) {
                 loginStatus(true);
+
+                mConfig.save(mEmailView.getText().toString(),
+                        mPasswordView.getText().toString(),
+                        mSecurityView.getText().toString());
             } else {
                 loginStatus(false);
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
