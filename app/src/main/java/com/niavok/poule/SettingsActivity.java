@@ -178,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            GSSession session = new GSSession(mEmail, mPassword);
+            GsSession session = new GsSession(mEmail, mPassword);
 
             session.login();
             return session.isLogged();

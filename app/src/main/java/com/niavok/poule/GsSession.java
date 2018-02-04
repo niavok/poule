@@ -21,13 +21,14 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by fredb on 03/02/2018.
  */
 
-class GSSession {
+class GsSession {
     private final String mEmail;
     private final String mPassword;
     private boolean mIsLogged;
     private CookieManager mCookieManager;
+    private String mSearchRecover;
 
-    public GSSession(String email, String password) {
+    public GsSession(String email, String password) {
         this.mEmail = email;
         this.mPassword = password;
         mIsLogged = false;
@@ -163,16 +164,18 @@ class GSSession {
         return mIsLogged;
     }
 
-    public List<GSLocation> getLocations() {
+    public List<GsLocation> getLocations() {
         if(!isLogged())
         {
             return null;
         }
 
-        ArrayList<GSLocation> locations = new ArrayList<>();
+        ArrayList<GsLocation> locations = new ArrayList<>();
 
 
         String locationPage = get("/cours/list/");
+
+        saveClassUserSearchRecover(locationPage);
 
         int selectStartIndex =  locationPage.indexOf("<select name=\"class_search_locationid\" title=\"Filtrer sur la salle\"");
         if(selectStartIndex == -1)
@@ -210,10 +213,135 @@ class GSSession {
 
             index = endNameIndex;
             if(!id.equals("-1")) {
-                locations.add(new GSLocation(id, name));
+                locations.add(new GsLocation(id, name));
             }
         }
 
         return locations;
+    }
+
+    private void saveClassUserSearchRecover(String locationPage) {
+        //<input type="hidden" name="class_user_search_recover" value="165233376">
+
+        MatchToken token = getToken(locationPage, "<input type=\"hidden\" name=\"class_user_search_recover\" value=\"", "\"", 0);
+
+        if(token != null) {
+            mSearchRecover = token.token;
+        }
+    }
+
+    private MatchToken getToken(String string, String start, String end, int index) {
+
+        int startIndex = string.indexOf(start, index);
+        if(startIndex == -1)
+        {
+            return null;
+        }
+        startIndex += start.length();
+        int endIndex = string.indexOf(end, startIndex);
+
+        if(endIndex == -1)
+        {
+            return null;
+        }
+
+        return new MatchToken(string.substring(startIndex, endIndex), endIndex);
+    }
+
+    private MatchToken getTokenReverse(String string, String start, String end, int index) {
+
+        int startIndex = string.indexOf(start, index);
+        if(startIndex == -1)
+        {
+            return null;
+        }
+
+        int endIndex = string.lastIndexOf(end, startIndex);
+
+        if(endIndex == -1)
+        {
+            return null;
+        }
+        endIndex += end.length();
+
+        return new MatchToken(string.substring(endIndex, startIndex), startIndex);
+    }
+
+    public List<GsActivity> getActivities(GsLocation location, GsDay day) {
+        if(!isLogged() || mSearchRecover==null)
+        {
+            return null;
+        }
+
+        ArrayList<GsLocation> locations = new ArrayList<>();
+
+       /* class_search_regionid=-1&class_search_level=-2
+        class_search_day:2
+
+        class_search_passcolor:-1
+        class_search_locationid:1
+*/
+        StringBuilder params = new StringBuilder();
+        params.append("class_search_regionid=-1&class_search_level=-2&class_search_passcolor:-1&class_search_day=");
+        try {
+            params.append(URLEncoder.encode(day.getId(), "UTF-8"));
+            params.append("&class_search_locationid=");
+            params.append(URLEncoder.encode(location.getId(), "UTF-8"));
+            params.append("&class_user_search_recover=");
+            params.append(URLEncoder.encode(mSearchRecover, "UTF-8"));
+
+
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        String page = post("/cours/list/", params.toString());
+
+        ArrayList<GsActivity> list = new ArrayList<GsActivity>();
+
+
+        int index = 0;
+        while(true)
+        {
+
+            MatchToken activityTime = getToken(page, "<td class=\"time \">", "</td>", index);
+            if(activityTime == null)
+            {
+                break;
+            }
+            index = activityTime.endIndex + 1;
+
+
+            MatchToken activityLocation = getTokenReverse(page, "</a>", "\">", index);
+            if(activityLocation == null)
+            {
+                break;
+            }
+            index = activityLocation.endIndex +1;
+
+
+            MatchToken activityLevel = getTokenReverse(page, "</a>", "\"/>", index);
+            if(activityLevel == null)
+            {
+                break;
+            }
+            index = activityLevel.endIndex +1;
+
+            //href="https://www.gymsuedoise.com/resa/bk/?id=438424&amp;u=a2e9">RÉSERVER</a>
+            MatchToken resaLink = getTokenReverse(page, "\">RÉSERVER</a>", "href=\"https://www.gymsuedoise.com", index);
+            String resaLinkStr = null;
+            if(resaLink != null)
+            {
+                resaLinkStr = resaLink.token;
+            }
+            index = activityLevel.endIndex +1;
+
+            list.add(new GsActivity(location, day, activityTime.token, activityLocation.token, activityLevel.token, resaLinkStr));
+        }
+
+
+        return list;
     }
 }
