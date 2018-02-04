@@ -1,5 +1,6 @@
 package com.niavok.poule;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -8,11 +9,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private PouleConfig mConfig;
+    private LinearLayout mResaActivityList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +30,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mResaActivityList = (LinearLayout) findViewById(R.id.resa_activity_list);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -38,6 +50,38 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mConfig = new PouleConfig(getApplicationContext());
+
+        mResaActivityList.removeAllViews();
+
+        for(final GsActivity activity : mConfig.getActivities())
+        {
+            //Sort by date /status
+
+            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = vi.inflate(R.layout.resa_activity_view, null);
+
+            TextView time = (TextView) v.findViewById(R.id.textViewTime);
+            time.setText(activity.getTimeString());
+
+            TextView level = (TextView) v.findViewById(R.id.textViewLevel);
+            level.setText(activity.getLevelString());
+
+            TextView location = (TextView) v.findViewById(R.id.textViewLocation);
+            location.setText(activity.getLocationString());
+
+
+            final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
+            final Button cancelButton = (Button) v.findViewById(R.id.buttonCancel);
+
+            mResaActivityList.addView(v);
         }
     }
 

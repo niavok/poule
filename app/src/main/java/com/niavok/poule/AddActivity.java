@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -176,7 +177,7 @@ public class AddActivity extends AppCompatActivity {
 
             if (success) {
 
-                for(GsActivity activity : mActivities)
+                for(final GsActivity activity : mActivities)
                 {
                     LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View v = vi.inflate(R.layout.add_activity_view, null);
@@ -189,6 +190,25 @@ public class AddActivity extends AppCompatActivity {
 
                     TextView location = (TextView) v.findViewById(R.id.textViewLocation);
                     location.setText(activity.getLocationString());
+
+
+                    final Button addButton = (Button) v.findViewById(R.id.buttonAdd);
+
+
+                    if(mConfig.HasActivity(activity))
+                    {
+                        addButton.setEnabled(false);
+                    }
+
+                    addButton.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+                            mConfig.AddActivity(activity);
+                            addButton.setEnabled(false);
+                        }
+                    });
+
 
                     mLocationActiviyyList.addView(v);
                 }

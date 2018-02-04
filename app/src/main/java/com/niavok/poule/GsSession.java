@@ -71,7 +71,7 @@ class GsSession {
 
             urlConnection.connect();
 
-            // Get cookies from responses and save into the cookie manager
+            // Get cookies from responses and saveLogin into the cookie manager
             List<String> cookieList = urlConnection.getHeaderFields().get("Set-Cookie");
             if (cookieList != null) {
                 for (String cookieTemp : cookieList) {
@@ -116,7 +116,7 @@ class GsSession {
 
             urlConnection.connect();
 
-            // Get cookies from responses and save into the cookie manager
+            // Get cookies from responses and saveLogin into the cookie manager
             List<String> cookieList = urlConnection.getHeaderFields().get("Set-Cookie");
             if (cookieList != null) {
                 for (String cookieTemp : cookieList) {

@@ -192,7 +192,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (success) {
                 loginStatus(true);
 
-                mConfig.save(mEmailView.getText().toString(),
+                mConfig.saveLogin(mEmailView.getText().toString(),
                         mPasswordView.getText().toString(),
                         mSecurityView.getText().toString());
             } else {

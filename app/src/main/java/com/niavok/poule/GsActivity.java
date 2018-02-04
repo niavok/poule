@@ -45,4 +45,31 @@ class GsActivity {
     public String getResaLink() {
         return mResaLink;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GsActivity that = (GsActivity) o;
+
+        if (mLocation != null ? !mLocation.equals(that.mLocation) : that.mLocation != null)
+            return false;
+        if (mDay != null ? !mDay.equals(that.mDay) : that.mDay != null) return false;
+        if (mTimeString != null ? !mTimeString.equals(that.mTimeString) : that.mTimeString != null)
+            return false;
+        if (mLocationString != null ? !mLocationString.equals(that.mLocationString) : that.mLocationString != null)
+            return false;
+        return mLevelString != null ? mLevelString.equals(that.mLevelString) : that.mLevelString == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mLocation != null ? mLocation.hashCode() : 0;
+        result = 31 * result + (mDay != null ? mDay.hashCode() : 0);
+        result = 31 * result + (mTimeString != null ? mTimeString.hashCode() : 0);
+        result = 31 * result + (mLocationString != null ? mLocationString.hashCode() : 0);
+        result = 31 * result + (mLevelString != null ? mLevelString.hashCode() : 0);
+        return result;
+    }
 }
