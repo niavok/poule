@@ -1,5 +1,7 @@
 package com.niavok.poule;
 
+import java.util.Calendar;
+
 /**
  * Created by fredb on 04/02/2018.
  */
@@ -71,5 +73,13 @@ class GsActivity {
         result = 31 * result + (mLocationString != null ? mLocationString.hashCode() : 0);
         result = 31 * result + (mLevelString != null ? mLevelString.hashCode() : 0);
         return result;
+    }
+
+    public int getRemainingDays() {
+        Calendar calendar = Calendar.getInstance();
+        int currentDay = (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
+
+
+        return (mDay.getIntId() - currentDay) % 7;
     }
 }

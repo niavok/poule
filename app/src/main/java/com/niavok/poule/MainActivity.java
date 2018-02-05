@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity
 
         mResaActivityList.removeAllViews();
 
+
+
         for(final GsActivity activity : mConfig.getActivities())
         {
             //Sort by date /status
@@ -77,6 +79,19 @@ public class MainActivity extends AppCompatActivity
             TextView location = (TextView) v.findViewById(R.id.textViewLocation);
             location.setText(activity.getLocationString());
 
+            int remainingDays = activity.getRemainingDays();
+
+            String status;
+            if(remainingDays > 0) {
+                status = "in " + Integer.toString(remainingDays) + " day" + (remainingDays > 1 ? "s" : "");
+            }
+            else
+            {
+                status = "today";
+            }
+
+            TextView statusTextView = (TextView) v.findViewById(R.id.textViewStatus);
+            statusTextView.setText(status);
 
             final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
             final Button cancelButton = (Button) v.findViewById(R.id.buttonCancel);
