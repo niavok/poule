@@ -1,5 +1,7 @@
 package com.niavok.poule;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -83,17 +85,29 @@ public class MainActivity extends AppCompatActivity
 
             String status;
             if(remainingDays > 0) {
-                status = "in " + Integer.toString(remainingDays) + " day" + (remainingDays > 1 ? "s" : "");
+                status = "In " + Integer.toString(remainingDays) + " day" + (remainingDays > 1 ? "s" : "");
             }
             else
             {
-                status = "today";
+                status = "Today";
             }
 
             TextView statusTextView = (TextView) v.findViewById(R.id.textViewStatus);
             statusTextView.setText(status);
 
             final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
+
+            resaButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), alarmIntent);
+                }
+            });
+
             final Button cancelButton = (Button) v.findViewById(R.id.buttonCancel);
 
             mResaActivityList.addView(v);

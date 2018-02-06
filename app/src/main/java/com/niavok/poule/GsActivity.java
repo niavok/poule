@@ -1,5 +1,6 @@
 package com.niavok.poule;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -80,6 +81,23 @@ class GsActivity {
         int currentDay = (calendar.get(Calendar.DAY_OF_WEEK) - 2) % 7;
 
 
-        return (mDay.getIntId() - currentDay) % 7;
+        int diff = (mDay.getIntId() - currentDay +7) % 7;
+        return diff;
+    }
+
+    public long getResaDate() {
+
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, getRemainingDays());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 1);
+
+        //SimpleDateFormat formatter=new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        //String currentDate = formatter.format(calendar.getTime());
+
+        return calendar.getTimeInMillis();
     }
 }
