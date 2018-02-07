@@ -345,4 +345,17 @@ class GsSession {
 
         return list;
     }
+
+    public boolean book(GsActivity activity) {
+        if(!isLogged() || activity.getResaLink() == null)
+        {
+            return false;
+        }
+
+        String resaPage = get(activity.getResaLink());
+        //resaPage = GSFake.getResaPage();
+
+        //TODO find resa list and match with activity
+        return false;
+    }
 }

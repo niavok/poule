@@ -350,4 +350,9 @@ class GSFake {
                 "\n" +
                 "</body></html>";
     }
+
+    public static String getResaPage() {
+        //TODO
+        return "";
+    }
 }

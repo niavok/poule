@@ -3,6 +3,8 @@
     package="com.niavok.poule">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
     <application
         android:allowBackup="true"
@@ -25,6 +27,8 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".AddActivity"></activity>
+        <receiver android:name=".BookingJobReceiver"></receiver>
+        <service android:name=".BookingJobService"></service>
     </application>
 
 </manifest>

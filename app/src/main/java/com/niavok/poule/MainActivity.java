@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         mResaActivityList.removeAllViews();
 
-        ArrayList<GsActivity> activities = mConfig.getActivities();
+        final ArrayList<GsActivity> activities = mConfig.getActivities();
         Collections.sort(activities, new Comparator<GsActivity>() {
             @Override
             public int compare(GsActivity g1, GsActivity g2) {
@@ -123,7 +123,16 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                    Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                    Intent intent = new Intent(getApplicationContext(), BookingJobReceiver.class);
+                    intent.setAction(activity.getLevelString()+" - "+activity.getTimeString()+" - "+activity.getLocationString());
+
+                    intent.putExtra("day", activity.getDay().getIntId());
+                    intent.putExtra("locationId", activity.getLocation().getId());
+                    intent.putExtra("locationName", activity.getLocation().getName());
+                    intent.putExtra("activityLocation", activity.getLocationString());
+                    intent.putExtra("activityTime", activity.getTimeString());
+                    intent.putExtra("activityLevel", activity.getLevelString());
+
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
                     alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), alarmIntent);
