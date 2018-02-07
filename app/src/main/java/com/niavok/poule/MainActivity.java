@@ -19,6 +19,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -63,9 +67,24 @@ public class MainActivity extends AppCompatActivity
 
         mResaActivityList.removeAllViews();
 
+        ArrayList<GsActivity> activities = mConfig.getActivities();
+        Collections.sort(activities, new Comparator<GsActivity>() {
+            @Override
+            public int compare(GsActivity g1, GsActivity g2) {
+                int d1 = g1.getRemainingDays();
+                int d2 = g2.getRemainingDays();
 
+                if(d1 == d2)
+                {
+                    return g1.getTimeString().compareTo(g1.getTimeString());
+                }
+                else {
+                    return d1 - d2;
+                }
+            }
+        });
 
-        for(final GsActivity activity : mConfig.getActivities())
+        for(final GsActivity activity : activities)
         {
             //Sort by date /status
 
@@ -83,6 +102,9 @@ public class MainActivity extends AppCompatActivity
 
             int remainingDays = activity.getRemainingDays();
 
+            final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
+
+
             String status;
             if(remainingDays > 0) {
                 status = "In " + Integer.toString(remainingDays) + " day" + (remainingDays > 1 ? "s" : "");
@@ -90,12 +112,12 @@ public class MainActivity extends AppCompatActivity
             else
             {
                 status = "Today";
+                resaButton.setEnabled(false);
             }
 
             TextView statusTextView = (TextView) v.findViewById(R.id.textViewStatus);
             statusTextView.setText(status);
 
-            final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
 
             resaButton.setOnClickListener(new View.OnClickListener() {
                 @Override
