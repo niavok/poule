@@ -298,6 +298,7 @@ class GsSession {
         }
 
         String page = post("/cours/list/", params.toString());
+        //page = GSFake.getListPage();
 
         ArrayList<GsActivity> list = new ArrayList<GsActivity>();
 
@@ -306,7 +307,7 @@ class GsSession {
         while(true)
         {
 
-            MatchToken activityTime = getToken(page, "<td class=\"time \">", "</td>", index);
+            MatchToken activityTime = getToken(page, "<td class=\"time \">", "<", index);
             if(activityTime == null)
             {
                 break;
@@ -322,7 +323,7 @@ class GsSession {
             index = activityLocation.endIndex +1;
 
 
-            MatchToken activityLevel = getTokenReverse(page, "</a>", "\"/>", index);
+            MatchToken activityLevel = getTokenReverse(page, "</a>", ">", index);
             if(activityLevel == null)
             {
                 break;
@@ -338,7 +339,7 @@ class GsSession {
             }
             index = activityLevel.endIndex +1;
 
-            list.add(new GsActivity(location, day, activityTime.token, activityLocation.token, activityLevel.token, resaLinkStr));
+            list.add(new GsActivity(location, day, activityTime.token.trim(), activityLocation.token.trim(), activityLevel.token.trim(), resaLinkStr));
         }
 
 
