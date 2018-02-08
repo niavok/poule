@@ -22,7 +22,15 @@ class GsActivity {
         this.mTimeString = timeString;
         this.mLocationString = locationString;
         this.mLevelString = levelString;
-        this.mResaLink = resaLink;
+
+        if(resaLink != null)
+        {
+            mResaLink = resaLink.replace("&amp;", "&");
+        }
+        else
+        {
+            mResaLink = null;
+        }
     }
 
     public GsLocation getLocation() {

@@ -331,7 +331,7 @@ class GsSession {
             index = activityLevel.endIndex +1;
 
             //href="https://www.gymsuedoise.com/resa/bk/?id=438424&amp;u=a2e9">RÉSERVER</a>
-            MatchToken resaLink = getTokenReverse(page, "\">RÉSERVER</a>", "href=\"https://www.gymsuedoise.com", index);
+            MatchToken resaLink = getTokenReverse(page, "\">R&Eacute;SERVER</a>", "href=\"https://www.gymsuedoise.com", index);
             String resaLinkStr = null;
             if(resaLink != null)
             {
@@ -352,10 +352,16 @@ class GsSession {
             return false;
         }
 
-        String resaPage = get(activity.getResaLink());
-        //resaPage = GSFake.getResaPage();
+        //https://www.gymsuedoise.com/resa/bk/?id=438428&u=21ec
+        //String resaPage = get(activity.getResaLink());
+        //String resaPage = GSFake.getResaPageOK();
+        String resaPage = "plop";
 
-        //TODO find resa list and match with activity
-        return false;
+        if(resaPage.indexOf("<p>Votre r&eacute;servation de cours a bien &eacute;t&eacute; enregistr&eacute;e. Vous allez recevoir un email de confirmation</p>") == -1)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

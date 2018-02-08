@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
             else
             {
                 status = "Today";
-                resaButton.setEnabled(false);
+                //resaButton.setEnabled(false);
             }
 
             TextView statusTextView = (TextView) v.findViewById(R.id.textViewStatus);

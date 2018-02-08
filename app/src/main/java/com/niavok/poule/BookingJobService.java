@@ -72,10 +72,15 @@ public class BookingJobService extends IntentService {
             if(makeReservation(bookingContext, resaLocation, resaDay, resaActivity))
             {
                 notifyResaSuccess();
+                return;
             }
 
+            if(i==4)
+            {
+                break;
+            }
             try {
-                Thread.sleep(1000 + 1000 * i);
+                Thread.sleep(1000 + 2000 * i);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

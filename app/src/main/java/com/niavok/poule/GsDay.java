@@ -6,7 +6,7 @@ package com.niavok.poule;
 
 class GsDay {
 
-    private static final String[] DAYS_NAME = {"Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"};
+    private static final String[] DAYS_NAME = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
     int mId;
 
