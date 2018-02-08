@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity
 
         mConfig = new PouleConfig(getApplicationContext());
 
+        refresh();
+
+    }
+
+    private void refresh() {
         mResaActivityList.removeAllViews();
 
         final ArrayList<GsActivity> activities = mConfig.getActivities();
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity
             int remainingDays = activity.getRemainingDays();
 
             final Button resaButton = (Button) v.findViewById(R.id.buttonResa);
+            final Button cancelButton = (Button) v.findViewById(R.id.buttonCancel);
 
 
             String status;
@@ -113,6 +119,14 @@ public class MainActivity extends AppCompatActivity
             {
                 status = "Today";
                 resaButton.setEnabled(false);
+            }
+
+            if(activity.isBooking())
+            {
+                status += " - booking";
+                resaButton.setEnabled(false);
+                resaButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.VISIBLE);
             }
 
             TextView statusTextView = (TextView) v.findViewById(R.id.textViewStatus);
@@ -136,10 +150,14 @@ public class MainActivity extends AppCompatActivity
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
                     alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), alarmIntent);
+
+                    activity.setBooking(true);
+                    mConfig.saveActivities();
+                    resaButton.setEnabled(false);
+                    refresh();
                 }
             });
 
-            final Button cancelButton = (Button) v.findViewById(R.id.buttonCancel);
 
             mResaActivityList.addView(v);
         }

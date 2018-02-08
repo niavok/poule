@@ -15,6 +15,7 @@ class GsActivity {
     private final String mLocationString;
     private final String mLevelString;
     private final String mResaLink;
+    private boolean mIsBooking;
 
     public GsActivity(GsLocation location, GsDay day, String timeString, String locationString, String levelString, String resaLink) {
         this.mLocation = location;
@@ -22,6 +23,7 @@ class GsActivity {
         this.mTimeString = timeString;
         this.mLocationString = locationString;
         this.mLevelString = levelString;
+        this.mIsBooking=false;
 
         if(resaLink != null)
         {
@@ -97,11 +99,12 @@ class GsActivity {
 
         Calendar calendar = Calendar.getInstance();
 
+        // TODO remove fake
         boolean fakeDate = true;
 
         if(fakeDate)
         {
-            calendar.add(Calendar.SECOND, 3);
+            calendar.add(Calendar.SECOND, 10);
         }
         else {
             calendar.add(Calendar.DATE, getRemainingDays());
@@ -114,5 +117,13 @@ class GsActivity {
 
         return calendar.getTimeInMillis();
 
+    }
+
+    public boolean isBooking() {
+        return mIsBooking;
+    }
+
+    public void setBooking(boolean booking) {
+        mIsBooking = booking;
     }
 }

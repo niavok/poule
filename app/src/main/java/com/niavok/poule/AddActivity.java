@@ -204,7 +204,7 @@ public class AddActivity extends AppCompatActivity {
 
                         @Override
                         public void onClick(View view) {
-                            mConfig.AddActivity(activity);
+                            mConfig.addActivity(activity);
                             addButton.setEnabled(false);
                         }
                     });

@@ -18,6 +18,7 @@ class PouleConfig {
     {
         mSharedPreferences = context.getSharedPreferences("poule_config",Context.MODE_PRIVATE);
 
+        //TODO registerOnSharedPreferenceChangeListener(spChanged)
         loadActivities();
     }
 
@@ -31,8 +32,11 @@ class PouleConfig {
             String locationName2 = getStringParam("locationName2-", i);
             String time = getStringParam("time-", i);
             String level = getStringParam("level-", i);
+            int booking = getIntParam("booking-", i);
 
-            mActivities.add(new GsActivity(new GsLocation(locationId, locationName), new GsDay(dayId), time, locationName2, level, null));
+            GsActivity activity = new GsActivity(new GsLocation(locationId, locationName), new GsDay(dayId), time, locationName2, level, null);
+            activity.setBooking(booking == 1);
+            mActivities.add(activity);
         }
     }
 
@@ -69,12 +73,12 @@ class PouleConfig {
                 .apply();
     }
 
-    public void AddActivity(GsActivity activity) {
+    public void addActivity(GsActivity activity) {
         mActivities.add(activity);
         saveActivities();
     }
 
-    private void saveActivities() {
+    public void saveActivities() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
         editor.putInt("activityCount", mActivities.size());
@@ -88,6 +92,7 @@ class PouleConfig {
             setStringParam(editor, "locationName2-", i, activity.getLocationString());
             setStringParam(editor, "time-", i, activity.getTimeString());
             setStringParam(editor, "level-", i, activity.getLevelString());
+            setIntParam(editor, "booking-", i, activity.isBooking() ? 1 : 0);
         }
 
         editor.apply();

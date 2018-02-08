@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,6 +74,15 @@ public class BookingJobService extends IntentService {
         GsLocation resaLocation = new GsLocation(locationId, locationName);
         GsDay resaDay = new GsDay(day);
         GsActivity resaActivity = new GsActivity(resaLocation,resaDay, activityTime, activityLocation,activityLevel, null);
+
+
+        ArrayList<GsActivity> configActivities = bookingContext.config.getActivities();
+        int activityIndex = configActivities.indexOf(resaActivity);
+        if(activityIndex != -1)
+        {
+            configActivities.get(activityIndex).setBooking(false);
+            bookingContext.config.saveActivities();
+        }
 
         int tryCount = 1;
         for(int i = 0 ; i < tryCount; i++)

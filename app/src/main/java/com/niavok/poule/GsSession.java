@@ -354,6 +354,7 @@ class GsSession {
 
         //https://www.gymsuedoise.com/resa/bk/?id=438428&u=21ec
         //String resaPage = get(activity.getResaLink());
+        // TODO remove fake
         String resaPage = GSFake.getResaPageOK();
         //String resaPage = "plop";
 
