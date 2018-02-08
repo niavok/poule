@@ -99,8 +99,7 @@ class GsActivity {
 
         Calendar calendar = Calendar.getInstance();
 
-        // TODO remove fake
-        boolean fakeDate = true;
+        boolean fakeDate = false;
 
         if(fakeDate)
         {

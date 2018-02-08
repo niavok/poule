@@ -353,9 +353,8 @@ class GsSession {
         }
 
         //https://www.gymsuedoise.com/resa/bk/?id=438428&u=21ec
-        //String resaPage = get(activity.getResaLink());
-        // TODO remove fake
-        String resaPage = GSFake.getResaPageOK();
+        String resaPage = get(activity.getResaLink());
+        //String resaPage = GSFake.getResaPageOK();
         //String resaPage = "plop";
 
         if(resaPage.indexOf("<p>Votre r&eacute;servation de cours a bien &eacute;t&eacute; enregistr&eacute;e. Vous allez recevoir un email de confirmation</p>") == -1)
