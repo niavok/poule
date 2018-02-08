@@ -1,8 +1,14 @@
 package com.niavok.poule;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 
 import java.util.List;
 
@@ -66,7 +72,8 @@ public class BookingJobService extends IntentService {
         GsDay resaDay = new GsDay(day);
         GsActivity resaActivity = new GsActivity(resaLocation,resaDay, activityTime, activityLocation,activityLevel, null);
 
-        for(int i = 0 ; i < 5; i++)
+        int tryCount = 1;
+        for(int i = 0 ; i < tryCount; i++)
         {
 
             if(makeReservation(bookingContext, resaLocation, resaDay, resaActivity))
@@ -75,7 +82,7 @@ public class BookingJobService extends IntentService {
                 return;
             }
 
-            if(i==4)
+            if(i==tryCount-1)
             {
                 break;
             }
@@ -90,9 +97,36 @@ public class BookingJobService extends IntentService {
     }
 
     private void notifyResaFailed() {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder noti = new NotificationCompat.Builder(getApplicationContext());
+
+                noti.setContentTitle("Booking failed")
+                .setContentText("plop")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setPriority(Notification.PRIORITY_MAX)
+        ///mBuilder.setStyle(bigText);
+                //.setLargeIcon(R.drawable.ic_menu_gallery)
+           //     .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                ;
+
+        mNotificationManager.notify(1, noti.build());
     }
 
     private void notifyResaSuccess() {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Notification noti = new Notification.Builder(getApplicationContext())
+                .setContentTitle("New mail from ")
+                .setContentText("plop")
+                .setSmallIcon(R.drawable.ic_menu_manage)
+                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
+                //.setLargeIcon(aBitmap)
+                .build();
+
+        mNotificationManager.notify(0, noti);
     }
 
     private boolean makeReservation(BookingContext bookingContext, GsLocation resaLocation, GsDay resaDay, GsActivity resaActivity) {

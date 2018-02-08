@@ -101,7 +101,7 @@ class GsActivity {
 
         if(fakeDate)
         {
-            calendar.add(Calendar.SECOND, 8);
+            calendar.add(Calendar.SECOND, 3);
         }
         else {
             calendar.add(Calendar.DATE, getRemainingDays());
