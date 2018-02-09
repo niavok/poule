@@ -1,5 +1,9 @@
 package com.niavok.poule;
 
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -124,5 +128,20 @@ class GsActivity {
 
     public void setBooking(boolean booking) {
         mIsBooking = booking;
+    }
+
+    public PendingIntent createActivityIntent(Context context) {
+        Intent intent = new Intent(context, BookingJobReceiver.class);
+        intent.setAction(getLevelString()+" - "+getTimeString()+" - "+getLocationString());
+
+        intent.putExtra("day", getDay().getIntId());
+        intent.putExtra("locationId", getLocation().getId());
+        intent.putExtra("locationName", getLocation().getName());
+        intent.putExtra("activityLocation", getLocationString());
+        intent.putExtra("activityTime", getTimeString());
+        intent.putExtra("activityLevel", getLevelString());
+
+        PendingIntent activityIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        return activityIntent;
     }
 }

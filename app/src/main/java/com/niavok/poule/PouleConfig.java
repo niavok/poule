@@ -15,6 +15,11 @@ class PouleConfig {
     private ArrayList<GsActivity> mActivities;
     private ConfigChangedListener mChangeListener;
 
+    public void removeActivity(GsActivity activity) {
+        mActivities.remove(activity);
+        saveActivities();
+    }
+
     public interface ConfigChangedListener
     {
         void onChanged();

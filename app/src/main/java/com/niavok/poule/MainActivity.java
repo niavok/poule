@@ -143,23 +143,26 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
                     AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                    Intent intent = new Intent(getApplicationContext(), BookingJobReceiver.class);
-                    intent.setAction(activity.getLevelString()+" - "+activity.getTimeString()+" - "+activity.getLocationString());
 
-                    intent.putExtra("day", activity.getDay().getIntId());
-                    intent.putExtra("locationId", activity.getLocation().getId());
-                    intent.putExtra("locationName", activity.getLocation().getName());
-                    intent.putExtra("activityLocation", activity.getLocationString());
-                    intent.putExtra("activityTime", activity.getTimeString());
-                    intent.putExtra("activityLevel", activity.getLevelString());
-
-                    PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-
-                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), alarmIntent);
+                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), activity.createActivityIntent(getApplicationContext()));
 
                     activity.setBooking(true);
                     mConfig.saveActivities();
                     resaButton.setEnabled(false);
+                    refresh();
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    alarmMgr.cancel(activity.createActivityIntent(getApplicationContext()));
+
+                    activity.setBooking(false);
+                    mConfig.saveActivities();
+
+                    cancelButton.setEnabled(false);
                     refresh();
                 }
             });
@@ -201,7 +204,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, AddActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_delete_activity) {
-
+            Intent intent = new Intent(this, RemoveActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

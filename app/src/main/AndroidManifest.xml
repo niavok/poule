@@ -27,6 +27,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".AddActivity"></activity>
+        <activity android:name=".RemoveActivity"></activity>
         <receiver android:name=".BookingJobReceiver"></receiver>
         <service android:name=".BookingJobService"></service>
     </application>
