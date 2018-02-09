@@ -64,6 +64,12 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         mConfig = new PouleConfig(getApplicationContext());
+        mConfig.setChangeListener(new PouleConfig.ConfigChangedListener() {
+            @Override
+            public void onChanged() {
+                refresh();
+            }
+        });
 
         refresh();
 

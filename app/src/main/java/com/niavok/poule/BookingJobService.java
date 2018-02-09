@@ -84,7 +84,7 @@ public class BookingJobService extends IntentService {
             bookingContext.config.saveActivities();
         }
 
-        int tryCount = 1;
+        int tryCount = 5;
         for(int i = 0 ; i < tryCount; i++)
         {
 

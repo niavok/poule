@@ -13,13 +13,32 @@ class PouleConfig {
 
     private final SharedPreferences mSharedPreferences;
     private ArrayList<GsActivity> mActivities;
+    private ConfigChangedListener mChangeListener;
 
+    public interface ConfigChangedListener
+    {
+        void onChanged();
+    }
+    
     PouleConfig(Context context)
     {
         mSharedPreferences = context.getSharedPreferences("poule_config",Context.MODE_PRIVATE);
 
-        //TODO registerOnSharedPreferenceChangeListener(spChanged)
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+                loadActivities();
+                if(mChangeListener != null)
+                {
+                    mChangeListener.onChanged();
+                }
+            }
+        });
         loadActivities();
+    }
+
+    public void setChangeListener(ConfigChangedListener changeListener) {
+        mChangeListener = changeListener;
     }
 
     private void loadActivities() {
