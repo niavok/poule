@@ -307,10 +307,14 @@ class GsSession {
         while(true)
         {
 
-            MatchToken activityTime = getToken(page, "<td class=\"time \">", "<", index);
+            MatchToken activityTime = getToken(page, "<td class=\"time innertip tip-info\">", "<", index);
             if(activityTime == null)
             {
-                break;
+                activityTime = getToken(page, "<td class=\"time \">", "<", index);
+                if(activityTime == null)
+                {
+                    break;
+                }
             }
             index = activityTime.endIndex + 1;
 
