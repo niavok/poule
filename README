@@ -1,0 +1,53 @@
+
+Poule goal is to book activities without having to be wake up at midnight. It do only this and don't aim to replace the official app for all others tasks (cancel reservation, check for planing changes, etc).
+Please report the bugs or suggestions at fred.bertolus@gmail.com
+
+How to use
+==========
+
+1 - Settings
+------------
+
+To do only one time.
+
+- Open the side menu, choose "Settings"
+- Fill your login and password and the secret key
+- Press on "Save login": a green disk must appear
+
+2 - Add activity
+----------------
+
+To do one time for each activity you want to book.
+
+- Open the side menu, choose "Add activity"
+- Choose the location and the day of the activity you want to book
+- Find your activity and press "Add"
+- You can add as many activity you want, then press back
+
+(You can remove the activity with the "Remove activity" menu in the side menu)
+
+3 - Booking
+-----------
+
+To do before each activity, few hours (or days) before midnight.
+
+- On the main page of Poule, you will see the activities sorted by day
+- Press the "Book" button for each activity you want to book
+- The "Booking" text should appear (you can cancel the automatic booking with the "Cancel button")
+- At midnight, Poule will try to book the activities for the next day. If it success, Poule will send you a discret notification (but check for the official mail). If it failed, Poule will send you a notification with vibrations.
+
+
+Important Notes
+===============
+
+- Your smartphone must have internet to book the activity at midnight
+
+- Poule may not be able to book activity after a smartphone reboot (and you won't have any notifications). After a reboot, cancel and book again in Poule. In general, use Poule at the last possible time.
+
+- If the planning changed (not right activity at the right location and at the right time), the booking will fail at midnight, you won't have any error using the book button. You must check yourself for the planning in the official apps/site.
+
+- If the book fail at midnight, Poule will retry 4 times after 1, 3, 5 and 7 seconds. Then it will notify
+
+- Poule don't let you book activities for the current day : use the official apps for this use case.
+
+- If the website change, the booking will fail until I fix the app.
