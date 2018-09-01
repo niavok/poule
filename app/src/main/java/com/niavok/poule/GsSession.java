@@ -44,7 +44,7 @@ class GsSession {
     {
         URL url = null;
         try {
-            url = new URL("https://www.gymsuedoise.com"+ path);
+            url = new URL("https://www.swedishfit.fr"+ path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
@@ -97,7 +97,7 @@ class GsSession {
     {
         URL url = null;
         try {
-            url = new URL("https://www.gymsuedoise.com"+ path);
+            url = new URL("https://www.swedishfit.fr"+ path);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
@@ -335,7 +335,7 @@ class GsSession {
             index = activityLevel.endIndex +1;
 
             //href="https://www.gymsuedoise.com/resa/bk/?id=438424&amp;u=a2e9">RÉSERVER</a>
-            MatchToken resaLink = getTokenReverse(page, "\">R&Eacute;SERVER</a>", "href=\"https://www.gymsuedoise.com", index);
+            MatchToken resaLink = getTokenReverse(page, "\">R&Eacute;SERVER</a>", "href=\"https://www.swedishfit.fr", index);
             String resaLinkStr = null;
             if(resaLink != null)
             {
