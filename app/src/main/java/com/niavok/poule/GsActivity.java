@@ -59,6 +59,10 @@ class GsActivity {
         return mLevelString;
     }
 
+    public String getLevelPrintString() {
+        return mLevelString.replace("&nbsp;", " ");
+    }
+
     public String getResaLink() {
         return mResaLink;
     }

@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
             time.setText(activity.getTimeString());
 
             TextView level = (TextView) v.findViewById(R.id.textViewLevel);
-            level.setText(activity.getLevelString());
+            level.setText(activity.getLevelPrintString());
 
             TextView location = (TextView) v.findViewById(R.id.textViewLocation);
             location.setText(activity.getLocationString());
