@@ -1,12 +1,8 @@
 package com.niavok.poule;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by fredb on 06/02/2018.

@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,16 +19,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private PouleConfig mConfig;
     private LinearLayout mResaActivityList;
+    private CheckAndBookActivityTask mCheckAndBookActivityTask;
 
 
     @Override
@@ -142,14 +146,11 @@ public class MainActivity extends AppCompatActivity
             resaButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
-                    alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, activity.getResaDate(), activity.createActivityIntent(getApplicationContext()));
-
-                    activity.setBooking(true);
-                    mConfig.saveActivities();
-                    resaButton.setEnabled(false);
-                    refresh();
+                    if(CheckAndBook(activity, resaButton))
+                    {
+                        return;
+                    }
                 }
             });
 
@@ -171,6 +172,8 @@ public class MainActivity extends AppCompatActivity
             mResaActivityList.addView(v);
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,5 +217,116 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean CheckAndBook(GsActivity activity, Button resaButton) {
+        if(mCheckAndBookActivityTask != null)
+        {
+            Toast.makeText(getApplicationContext(),"Booking already in progress",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        mCheckAndBookActivityTask = new CheckAndBookActivityTask(activity, resaButton);
+        mCheckAndBookActivityTask.execute((Void) null);
+        return true;
+    }
+
+
+    public class CheckAndBookActivityTask extends AsyncTask<Void, Void, Boolean> {
+        private GsActivity mActivity;
+        private Button mResaButton;
+
+        public CheckAndBookActivityTask(GsActivity activity, Button resaButton) {
+            mActivity = activity;
+
+            mResaButton = resaButton;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            GsSession session = new GsSession(mConfig.getEmail(), mConfig.getPassword());
+            session.login();
+            if(!session.isLogged())
+            {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Login check failed",Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                return false;
+            }
+
+            List<GsLocation> locations = session.getLocations();
+
+            if(locations == null)
+            {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"List locations check failed",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return false;
+            }
+
+            if(!locations.contains(mActivity.getLocation()))
+            {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Fail to find location",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return false;
+            }
+
+            List<GsActivity> activities = session.getActivities(mActivity.getLocation(), mActivity.getDay());
+
+            if(activities == null)
+            {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"List activities check failed",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return false;
+            }
+
+            if(!activities.contains(mActivity))
+            {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Fail to find activity",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return false;
+            }
+
+
+            // Prepare alarm
+            AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, mActivity.getResaDate(), mActivity.createActivityIntent(getApplicationContext()));
+
+            mActivity.setBooking(true);
+            mConfig.saveActivities();
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+            mCheckAndBookActivityTask = null;
+
+            if (success) {
+                mResaButton.setEnabled(false);
+                refresh();
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -80,15 +81,25 @@ public class AddActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             GsSession session = new GsSession(mConfig.getEmail(), mConfig.getPassword());
             session.login();
-            if(!session.isLogged())
-            {
+            if (!session.isLogged()) {
+                AddActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"Login failed",Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return false;
             }
 
             mLocations = session.getLocations();
 
-            if(mLocations == null)
-            {
+            if (mLocations == null) {
+                AddActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"List location failed",Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return null;
             }
 
@@ -118,15 +129,13 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    void generateActivityList()
-    {
+    void generateActivityList() {
         String day = (String) mDaysSpinner.getSelectedItem();
         GsLocation location = (GsLocation) mLocationsSpinner.getSelectedItem();
 
         clearActivityList();
 
-        if(location == null || day == null)
-        {
+        if (location == null || day == null) {
             return;
         }
 
@@ -155,16 +164,14 @@ public class AddActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             GsSession session = new GsSession(mConfig.getEmail(), mConfig.getPassword());
             session.login();
-            if(!session.isLogged())
-            {
+            if (!session.isLogged()) {
                 return false;
             }
 
             session.getLocations();
             mActivities = session.getActivities(mLocation, new GsDay(mDay));
 
-            if(mActivities == null)
-            {
+            if (mActivities == null) {
                 return false;
             }
 
@@ -177,8 +184,7 @@ public class AddActivity extends AppCompatActivity {
 
             if (success) {
 
-                for(final GsActivity activity : mActivities)
-                {
+                for (final GsActivity activity : mActivities) {
                     LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View v = vi.inflate(R.layout.add_activity_view, null);
 
@@ -195,8 +201,7 @@ public class AddActivity extends AppCompatActivity {
                     final Button addButton = (Button) v.findViewById(R.id.buttonAdd);
 
 
-                    if(mConfig.HasActivity(activity))
-                    {
+                    if (mConfig.HasActivity(activity)) {
                         addButton.setEnabled(false);
                     }
 
